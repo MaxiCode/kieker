@@ -2,19 +2,18 @@
 
 pipeline {
 
-  agent {
-    label 'kieker-slave-docker'
-  } 
-
   environment {
     DOCKER_IMAGE = 'kieker/kieker-build'
-    DOCKER_LABEL = 'openjdk7-small'
+    DOCKER_LABEL = 'openjdk8-small'
     DOCKER_INIT  = 'docker run '
     DOCKER_ARGS  = '--rm -v ${env.WORKSPACE}:/opt/kieker '
     DOCKER_BASH  = ' /bin/bash -c '
   }
 
- 
+  agent {
+    label 'kieker-slave-docker'
+  } 
+
   //triggers {
   //  cron{}
   //}
@@ -43,8 +42,6 @@ pipeline {
 
     stage('Compile') {
       
-      // Can't be used due to bug: https://stackoverflow.com/questions/46385542/jenkinsfile-docker-agent-step-dies-after-1-second
-      /**
       agent {
         docker {
           reuseNode true 
@@ -52,14 +49,10 @@ pipeline {
           args ' --rm -u `id -u` -v ${env.WORKSPACE}:/opt/kieker'
           label 'kieker-slave-docker'
         }
-      }**/
+      }
       steps {
-        script {
-          env.UID = $(id -u)
-        }
-        sh DOCKER_INIT + ${env.UID} + DOCKER_ARGS +  DOCKER_IMAGE + ':' + DOCKER_LABEL + DOCKER_BASH + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
-        //sh './kieker/gradlew -S -p kieker compileJava compileTestJava'
-        //stash 'everything'
+        sh './kieker/gradlew -S -p kieker compileJava compileTestJava'
+        stash 'everything'
       }
     }
   
@@ -118,11 +111,6 @@ pipeline {
         sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
       }
     }
-
-    //stage('Fix permissions') {
-    //  steps {         
-    //  }
-    //}
     **/
   }
 
