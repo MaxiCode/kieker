@@ -45,7 +45,7 @@ pipeline {
       agent {
         docker {
           reuseNode true 
-          image 'kieker/kieker-build:openjdk7-small'
+          image env.DOCKER_IMAGE + ":" + DOCKER_LABEL
           args ' --rm -u `id -u` -v ${env.WORKSPACE}:/opt/kieker'
           label 'kieker-slave-docker'
         }
@@ -53,6 +53,7 @@ pipeline {
       steps {
         sh './kieker/gradlew -S -p kieker compileJava compileTestJava'
         stash 'everything'
+        echo "Test output."
       }
     }
   
