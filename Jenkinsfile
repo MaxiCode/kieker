@@ -45,7 +45,7 @@ pipeline {
       agent {
         docker {
           reuseNode true 
-          image env.DOCKER_IMAGE + ":" + DOCKER_LABEL
+          image env.DOCKER_IMAGE + ":" + env.DOCKER_LABEL
           args ' --rm -u `id -u` -v ${env.WORKSPACE}:/opt/kieker'
           label 'kieker-slave-docker'
         }
