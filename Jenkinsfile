@@ -50,7 +50,6 @@ pipeline {
         }
       }
       steps {
-        echo 
         sh './kieker/gradlew -S -p kieker compileJava compileTestJava'
         echo "Test output."
       }
