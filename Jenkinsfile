@@ -4,10 +4,8 @@ pipeline {
 
   environment {
     DOCKER_IMAGE = 'kieker/kieker-build'
-    DOCKER_LABEL = 'openjdk8-small'
-    DOCKER_INIT  = 'docker run '
+    DOCKER_LABEL = 'openjdk8'
     DOCKER_ARGS  = '--rm -u `id -u`'
-    DOCKER_BASH  = ' /bin/bash -c '
   }
 
   agent {
@@ -44,9 +42,8 @@ pipeline {
       
       agent {
         docker {
-          image 'kieker/kieker-build:openjdk8'
+          image "$env.DOCKER_IMAGE:$env.DOCKER_LABEL"
           args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
         }
       }
       steps {
