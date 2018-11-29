@@ -52,7 +52,7 @@ pipeline {
       steps {
         echo env.WORKSPACE
         echo env.DOCKER_ARGS
-        sh 'cd /opt/kieker && ./gradlew -S -p kieker compileJava compileTestJava'
+        sh 'ls -al /
         echo "Test output."
       }
     }
