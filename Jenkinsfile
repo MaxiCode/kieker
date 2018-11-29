@@ -44,15 +44,13 @@ pipeline {
       
       agent {
         docker {
-          reuseNode true 
           image 'kieker/kieker-build:openjdk8'
-          args " --rm -u `id -u` -v $env.WORKSPACE:/opt/kieker --entrypoint=''"
+          args ' --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker'
           label 'kieker-slave-docker'
         }
       }
       steps {
         sh './kieker/gradlew -S -p kieker compileJava compileTestJava'
-        stash 'everything'
         echo "Test output."
       }
     }
