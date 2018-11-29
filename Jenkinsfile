@@ -49,7 +49,7 @@ pipeline {
       }
       steps {
         dir(env.WORKSPACE) {
-          sh './gradlew compileJava'
+          sh './gradlew clean'
         }
       }
     }
