@@ -45,8 +45,8 @@ pipeline {
       agent {
         docker {
           reuseNode true 
-          image 'kieker/kieker-build:openjdk8-small'
-          args ' --rm -u `id -u` -v $env.WORKSPACE:/opt/kieker --entrypoint=\'\''
+          image 'kieker/kieker-build:openjdk8'
+          args " --rm -u `id -u` -v $env.WORKSPACE:/opt/kieker --entrypoint=''"
           label 'kieker-slave-docker'
         }
       }
