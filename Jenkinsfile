@@ -52,7 +52,7 @@ pipeline {
       steps {
         echo env.WORKSPACE
         echo env.DOCKER_ARGS
-        sh 'ls -al /
+        sh 'ls -al /'
         echo "Test output."
       }
     }
