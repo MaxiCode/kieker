@@ -45,7 +45,7 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
-          args "$env.DOCKER_ARGS -v $env.WORKSPACE:/opt/kieker"
+          args env.DOCKER_ARGS
           label 'kieker-slave-docker'
         }
       }
