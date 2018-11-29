@@ -47,8 +47,9 @@ pipeline {
         }
       }
       steps {
-        sh "cd $env.WORKSPACE"
-        sh "./gradlew compileJava"
+        dir(env.WORKSPACE) {
+          sh "./gradlew compileJava"
+        }
       }
     }
   
