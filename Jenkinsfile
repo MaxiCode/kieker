@@ -6,7 +6,7 @@ pipeline {
     DOCKER_IMAGE = 'kieker/kieker-build'
     DOCKER_LABEL = 'openjdk8-small'
     DOCKER_INIT  = 'docker run '
-    DOCKER_ARGS  = "--rm -u `id -u` -v $env.WORKSPACE" + ":/opt/kieker"
+    DOCKER_ARGS  = "--rm -u `id -u` -v $env.WORKSPACE:/opt/kieker"
     DOCKER_BASH  = ' /bin/bash -c '
   }
 
@@ -51,7 +51,7 @@ pipeline {
       }
       steps {
         echo env.WORKSPACE
-        echo env.DOCKER_ARGS
+        echo "$env.DOCKER_ARGS -v $env.WORKSPACE:/opt/kieker"
         sh 'ls -al /opt'
         echo "Test output."
       }
