@@ -50,7 +50,8 @@ pipeline {
         }
       }
       steps {
-        sh './kieker/gradlew -S -p kieker compileJava compileTestJava'
+        echo env.DOCKER_ARGS
+        sh 'cd /opt/kieker && ./gradlew -S -p kieker compileJava compileTestJava'
         echo "Test output."
       }
     }
