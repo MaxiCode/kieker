@@ -42,16 +42,12 @@ pipeline {
       
       agent {
         docker {
-          image "$env.DOCKER_IMAGE:$env.DOCKER_LABEL"
+          image 'env.DOCKER_IMAGE:env.DOCKER_LABEL'
           args env.DOCKER_ARGS
         }
       }
       steps {
-        echo env.WORKSPACE
-        echo env.DOCKER_ARGS
-        sh 'ls -al /opt'
-        sh "ls -al $env.WORKSPACE"
-        echo "Test output."
+        sh "./gradlew -p $env.WORKSPACE compileJava"
       }
     }
   
