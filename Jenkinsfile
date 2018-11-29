@@ -32,12 +32,6 @@ pipeline {
       }
     }
 
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
-
     stage('Compile') {
       
       agent {
