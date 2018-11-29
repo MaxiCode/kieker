@@ -53,6 +53,7 @@ pipeline {
         echo env.WORKSPACE
         echo env.DOCKER_ARGS
         sh 'ls -al /opt'
+        sh "ls -al $env.WORKSPACE"
         echo "Test output."
       }
     }
