@@ -42,12 +42,13 @@ pipeline {
       
       agent {
         docker {
-          image 'env.DOCKER_IMAGE:env.DOCKER_LABEL'
+          image 'kieker/kieker-build:openjdk8'
           args env.DOCKER_ARGS
         }
       }
       steps {
-        sh "./gradlew -p $env.WORKSPACE compileJava"
+        sh "cd $env.WORKSPACE"
+        sh "./gradlew compileJava"
       }
     }
   
