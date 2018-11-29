@@ -6,7 +6,7 @@ pipeline {
     DOCKER_IMAGE = 'kieker/kieker-build'
     DOCKER_LABEL = 'openjdk8-small'
     DOCKER_INIT  = 'docker run '
-    DOCKER_ARGS  = "--rm -u `id -u` -v $env.WORKSPACE:/opt/kieker"
+    DOCKER_ARGS  = "--rm -u `id -u` -v $env.WORKSPACE" + ":/opt/kieker"
     DOCKER_BASH  = ' /bin/bash -c '
   }
 
@@ -26,10 +26,10 @@ pipeline {
         }
       }
       steps {
-        echo "BRANCH_NAME: " + env.BRANCH_NAME
-        echo "CHANGE_TARGET: " + env.CHANGE_TARGET
-        echo "NODE_NAME: " + env.NODE_NAME
-        echo "NODE_LABELS: " + env.NODE_LABELS
+        echo "BRANCH_NAME: $env.BRANCH_NAME"
+        echo "CHANGE_TARGET: $env.CHANGE_TARGET"
+        echo "NODE_NAME: $env.NODE_NAME"
+        echo "NODE_LABELS: $env.NODE_LABELS"
         error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
       }
     }
