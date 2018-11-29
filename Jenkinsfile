@@ -6,7 +6,7 @@ pipeline {
     DOCKER_IMAGE = 'kieker/kieker-build'
     DOCKER_LABEL = 'openjdk8-small'
     DOCKER_INIT  = 'docker run '
-    DOCKER_ARGS  = '--rm -u `id -u` -v ${env.WORKSPACE}:/opt/kieker '
+    DOCKER_ARGS  = '--rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '
     DOCKER_BASH  = ' /bin/bash -c '
   }
 
@@ -50,6 +50,7 @@ pipeline {
         }
       }
       steps {
+        echo env.WORKSPACE
         echo env.DOCKER_ARGS
         sh 'cd /opt/kieker && ./gradlew -S -p kieker compileJava compileTestJava'
         echo "Test output."
