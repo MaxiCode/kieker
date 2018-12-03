@@ -54,10 +54,11 @@ pipeline {
             }
         }
 
-        stage('Static Analysis')
-        steps {
-            dir(env.WORKSPACE) {
-                sh './gradlew check'
+        stage('Static Analysis') {
+            steps {
+                dir(env.WORKSPACE) {
+                    sh './gradlew check'
+                }
             }
         }
 
@@ -93,25 +94,25 @@ pipeline {
                 }
             }
         }
+    }
 
-        post {
-            always {
-                deleteDir()
-            }
-
-            //changed {
-            //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
-            //}
-
-            //failure {
-            //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
-            //}
-
-            //success {
-            //}
-
-            //unstable {
-            //}
+    post {
+        always {
+            deleteDir()
         }
+
+        //changed {
+        //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
+        //}
+
+        //failure {
+        //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
+        //}
+
+        //success {
+        //}
+
+        //unstable {
+        //}
     }
 }
