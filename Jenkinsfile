@@ -37,7 +37,6 @@ pipeline {
     }
 
     stage('Compile') {
-      
       steps {
         dir(env.WORKSPACE) {
           sh './gradlew compileJava'
@@ -46,39 +45,29 @@ pipeline {
       }
     }
   
-/**
-    stage('Parallel') {
-      steps {
-        parallel (
-          'Unit Test' : {
-            unstash 'everything'
-            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
-          },
-          'Static Analysis' : {
-            unstash 'everything'
-            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
-            stash 'everything'
-          }
-        )
-      }
-    }
 
     stage('Unit Test') {
       steps {
-        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
+        dir(env.WORKSPACE) {
+          sh './gradlew test'
+        }
+      }
+    }
+        
+    stage('Static Analysis')
+      steps {
+        dir(env.WORKSPACE) {
+          sh './gradlew check'
+        }
       }
     }
 
-    stage('Static Analysis') {
-      steps {
-        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
-      }
-    }
-    
     stage('Release Check Short') {
       steps {
-        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
+        dir(env.WORKSPACE) {
+          sh './gradlew checkReleaseArchivesShort'
+          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
+        }
       }
     }
 
@@ -87,21 +76,24 @@ pipeline {
         branch 'master'
       }
       steps {
-        echo "We are in master - executing the extended release archive check."
-        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives -x test -x check "'
+        dir(env.WORKSPACE) {
+          echo "We are in master - executing the extended release archive check."
+          sh './gradlew checkReleaseArchives -x test -x check '
+        }
       }
     }
 
-    stage('Push Stable') {
+    stage('Push to Stable') {
       when {
         branch 'master'
       }
       steps {
-        echo "We are in master - pushing to stable branch."
-        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+        dir(env.WORKSPACE) {
+          echo "We are in master - pushing to stable branch."
+          sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+        }
       }
     }
-    **/
   }
 
   post {
