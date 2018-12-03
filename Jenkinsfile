@@ -10,6 +10,11 @@ pipeline {
 
   agent {
     label 'kieker-slave-docker'
+    docker {
+      image 'kieker/kieker-build:openjdk8'
+      args env.DOCKER_ARGS
+      label 'kieker-slave-docker'
+    }
   } 
 
   //triggers {
@@ -34,16 +39,10 @@ pipeline {
 
     stage('Compile') {
       
-      agent {
-        docker {
-          image 'kieker/kieker-build:openjdk8'
-          args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
-        }
-      }
       steps {
         dir(env.WORKSPACE) {
-          sh './gradlew clean'
+          sh './gradlew compileJava'
+          sh './gradlew compileTestJava'
         }
       }
     }
