@@ -108,6 +108,19 @@ pipeline {
         }
       }
     }
+
+    stage('Upload Snapshot Version') {
+      when {
+        branch 'master'
+      }
+      steps {
+        dir(env.WORKSPACE) {
+          withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
+            sh './gradlew uploadArchives'
+          }
+        }
+      }
+    }
   }
 
   post {
