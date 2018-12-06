@@ -3,14 +3,12 @@
 pipeline {
 
   environment {
-    DOCKER_IMAGE = 'kieker/kieker-build:openjdk8'
     DOCKER_ARGS = '--rm -u `id -u`'
   }
 
   agent {
     docker {
       image 'kieker/kieker-build:openjdk8'
-      //image env.DOCKER_IMAGE
       args env.DOCKER_ARGS
       label 'kieker-slave-docker'
     }
@@ -50,6 +48,15 @@ pipeline {
       steps {
         dir(env.WORKSPACE) {
           sh './gradlew test'
+          junit '**/build/test-results/test/*.xml'
+          step([
+		        $class: 'CloverPublisher',
+		        cloverReportDir: env.WORKSPACE + '/build/reports/clover',
+		        cloverReportFileName: 'clover.xml',
+		        healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],   // optional, default is: method=70, conditional=80, statement=80
+		        unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+		        //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+          ])
         }
       }
     }
