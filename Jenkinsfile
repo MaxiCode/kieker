@@ -9,8 +9,8 @@ pipeline {
 
   agent {
     docker {
-      //image 'kieker/kieker-build:openjdk8'
-      image env.DOCKER_IMAGE
+      image 'kieker/kieker-build:openjdk8'
+      //image env.DOCKER_IMAGE
       args env.DOCKER_ARGS
       label 'kieker-slave-docker'
     }
