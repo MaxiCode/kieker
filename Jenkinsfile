@@ -3,14 +3,14 @@
 pipeline {
 
   environment {
-    DOCKER_IMAGE = 'kieker/kieker-build'
-    DOCKER_LABEL = 'openjdk8'
+    DOCKER_IMAGE = 'kieker/kieker-build:openjdk8'
     DOCKER_ARGS = '--rm -u `id -u`'
   }
 
   agent {
     docker {
-      image 'kieker/kieker-build:openjdk8'
+      //image 'kieker/kieker-build:openjdk8'
+      image env.DOCKER_IMAGE
       args env.DOCKER_ARGS
       label 'kieker-slave-docker'
     }
