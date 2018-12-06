@@ -80,7 +80,7 @@ pipeline {
       steps {
         dir(env.WORKSPACE) {
           sh './gradlew checkReleaseArchivesShort'
-          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
+          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
         }
       }
     }
