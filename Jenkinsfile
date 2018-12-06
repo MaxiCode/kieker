@@ -128,12 +128,10 @@ pipeline {
     }
 
     changed {
-      when {
-        branch 'master'
-      }
       mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: '''
       Dear Kieker Developers,
-      unfortunately, the Kieker build failed.
+      unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
+      More details can be found at ${BUILD_URL}.
       Best,
       Jenkins
       '''
