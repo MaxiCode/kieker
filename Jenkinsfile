@@ -14,9 +14,9 @@ pipeline {
     }
   }
 
-  //triggers {
-  //  cron{}
-  //}
+  triggers {
+    cron(env.BRANCH_NAME == 'master' ? '@daily' : '')
+  }
 
   stages {
     stage('Precheck') {
@@ -128,9 +128,17 @@ pipeline {
       deleteDir()
     }
 
-    //changed {
-    //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
-    //}
+    changed {
+      when {
+        branch 'master'
+      }
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: '''
+      Dear Kieker Developers,
+      unfortunately, the Kieker build failed.
+      Best,
+      Jenkins
+      '''
+    }
 
     //failure {
     //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
