@@ -22,6 +22,7 @@ pipeline {
     stage('Precheck') {
       when {
         expression {
+          // if this is a PR against the 'stable' branch
           (env.CHANGE_TARGET != null) && (env.CHANGE_TARGET == 'stable')
         }
       }
@@ -148,18 +149,9 @@ pipeline {
       Jenkins
       '''
     }
-
-    //changed {
-    //}
-
-    //failure {
-    //mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
-    //}
-
-    //success {
-    //}
-
-    //unstable {
-    //}
+    //changed  {}
+    //failure  {}
+    //success  {}
+    //unstable {}
   }
 }
