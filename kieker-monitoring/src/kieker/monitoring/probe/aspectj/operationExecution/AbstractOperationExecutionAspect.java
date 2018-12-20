@@ -16,6 +16,9 @@
 
 package kieker.monitoring.probe.aspectj.operationExecution;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,7 +50,8 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
 	/**
-	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the correct executions of the methods (e.g. all
+	 * The pointcut for the monitored operations. Inheriting classes should extend
+	 * the pointcut in order to find the correct executions of the methods (e.g. all
 	 * methods or only methods with specific annotations).
 	 */
 	@Pointcut
@@ -89,12 +93,20 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		final long tin = TIME.getTime();
 		// execution of the called method
 		final Object retval;
+		final ArrayList<Object> results = new ArrayList<>();
 		try {
 			retval = thisJoinPoint.proceed();
+			results.addAll(Arrays.asList(thisJoinPoint.getArgs()));
+
 		} finally {
 			// measure after
 			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+
+			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature + this.argsToString(results), sessionId,
+					traceId, tin, tout, hostname, eoi, ess));
+
+//			System.out.println("Inside writing point. Should write " + results.size() + " args.");
+
 			// cleanup
 			if (entrypoint) {
 				CFREGISTRY.unsetThreadLocalTraceId();
@@ -105,5 +117,22 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 			}
 		}
 		return retval;
+	}
+
+	private String argsToString(final ArrayList<Object> args) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("#");
+		for (int i = 0; i < args.size(); i++) {
+			if (args.get(i) instanceof Long) {
+				final Long l = (Long) args.get(i);
+				sb.append(l + "L#");
+			} else if (args.get(i) instanceof Integer) {
+				final Integer l = (Integer) args.get(i);
+				sb.append(l + "I#");
+			} else {
+				sb.append(args.get(i).getClass().getName() + "O#");
+			}
+		}
+		return sb.toString();
 	}
 }
